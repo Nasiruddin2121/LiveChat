@@ -1,0 +1,18 @@
+### Server ............
+npm init -y
+npm i express socket.io
+npm i --save-dev nodemon
+npm i cors
+
+
+### Client .............
+npm create vite@latest
+npm i 
+npm install @mui/material @emotion/react @emotion/styled
+npm install socket.io-client
+
+
+
+link: 
+https://socket.io/docs/v4/tutorial/introduction
+https://mui.com/material-ui/getting-started/installation/
