@@ -82,17 +82,12 @@ export class AuthController {
           HttpStatus.UNAUTHORIZED,
         );
       }
-
-      // Validate user type (reject admin)
-      // This is handled by DTO validation, but we can also check here for additional security
       if (type === 'admin') {
         throw new HttpException(
           'Admin registration is not allowed through this endpoint',
           HttpStatus.FORBIDDEN,
         );
       }
-
-      // Register user
       const response = await this.authService.register({
         name: name,
         first_name: first_name,
@@ -110,8 +105,6 @@ export class AuthController {
       };
     }
   }
-
-  // login user
   @ApiOperation({ summary: 'Login user' })
   @UseGuards(LocalAuthGuard)
   @Post('login')
@@ -125,12 +118,10 @@ export class AuthController {
         userId: user_id,
         email: user_email,
       });
-
-      // store to secure cookies
       res.cookie('refresh_token', response.authorization.refresh_token, {
         httpOnly: true,
         secure: true,
-        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+        maxAge: 1000 * 60 * 60 * 24 * 7, 
       });
 
       res.json(response);
@@ -204,18 +195,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Patch('update')
   @UseInterceptors(
-    FileInterceptor('image', {
-      // storage: diskStorage({
-      //   destination:
-      //     appConfig().storageUrl.rootUrl + appConfig().storageUrl.avatar,
-      //   filename: (req, file, cb) => {
-      //     const randomName = Array(32)
-      //       .fill(null)
-      //       .map(() => Math.round(Math.random() * 16).toString(16))
-      //       .join('');
-      //     return cb(null, `${randomName}${file.originalname}`);
-      //   },
-      // }),
+    FileInterceptor('image', {      
       storage: memoryStorage(),
     }),
   )
@@ -343,14 +323,10 @@ export class AuthController {
     @Body() data: { email: string; old_password: string; new_password: string },
   ) {
     try {
-      // const email = data.email;
       const user_id = req.user.userId;
 
       const oldPassword = data.old_password;
       const newPassword = data.new_password;
-      // if (!email) {
-      //   throw new HttpException('Email not provided', HttpStatus.UNAUTHORIZED);
-      // }
       if (!oldPassword) {
         throw new HttpException(
           'Old password not provided',
@@ -376,10 +352,6 @@ export class AuthController {
       };
     }
   }
-
-  // --------------end change password---------
-
-  // -------change email address------
   @ApiOperation({ summary: 'request email change' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)

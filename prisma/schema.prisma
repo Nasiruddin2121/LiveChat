@@ -169,8 +169,6 @@ model RoleUser {
   @@id([role_id, user_id])
   @@map("role_users")
 }
-
-// this table stores notification event
 model NotificationEvent {
   id         String    @id @default(cuid())
   created_at DateTime  @default(now())
@@ -251,7 +249,6 @@ model PaymentTransaction {
   @@map("payment_transactions")
 }
 
-// ---------Start Broadcast schema---------
 
 // this table stores patient broadcast messages
 model Broadcast {
@@ -301,10 +298,10 @@ model Message {
   attachment_id String?
   attachment    Attachment? @relation(fields: [attachment_id], references: [id])
 
-  message          String? // Message text content
-  message_type     String? @default("text") // "text", "prescription"
-  medicine_details String? // Prescription data (JSON or text)
-  patient_name     String? // For prescription messages
+  message          String? 
+  message_type     String? @default("text")
+  medicine_details String?
+  patient_name     String? 
 
   @@index([message_type])
   @@index([conversation_id])
@@ -339,10 +336,10 @@ model Conversation {
   participant_id String?
   participant    User?   @relation("participant", fields: [participant_id], references: [id])
 
-  status       String? @default("open") // "open", "closed", "assisted"
-  type         String? @default("patient_doctor") // "patient_doctor", "doctor_shop_owner"
-  broadcast_id String? // Link to broadcast (if created from broadcast)
-  assisted_by  String? // doctor_id who responded first (for broadcasts)
+  status       String? @default("open")
+  type         String? @default("patient_doctor") 
+  broadcast_id String? 
+  assisted_by  String? 
 
   messages Message[]
 

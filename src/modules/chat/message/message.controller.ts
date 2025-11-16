@@ -27,14 +27,7 @@ export class MessageController {
     private readonly messageGateway: MessageGateway,
   ) {}
 
-  /**
-   * Send a message
-   * Supports both text messages and prescription messages
-   * Only doctors can create prescription messages
-   * @param req - The request object containing the authenticated user
-   * @param createMessageDto - The message data
-   * @returns Created message
-   */
+  
   @ApiOperation({
     summary: 'Send message',
     description:
@@ -51,31 +44,17 @@ export class MessageController {
         user_id,
         createMessageDto,
       );
-
-      // WebSocket events are handled in the service
-      // Return the result
       return result;
     } catch (error) {
-      // Handle known errors
       if (error instanceof HttpException) {
         throw error;
       }
-
-      // Handle other errors
       return {
         success: false,
         message: error.message || 'Failed to send message',
       };
     }
   }
-
-  /**
-   * Get all messages in a conversation
-   * Returns messages with prescription data if applicable
-   * @param req - The request object containing the authenticated user
-   * @param query - Query parameters (conversation_id, limit, cursor)
-   * @returns List of messages
-   */
   @ApiOperation({
     summary: 'Get all messages',
     description:
@@ -106,27 +85,15 @@ export class MessageController {
 
       return messages;
     } catch (error) {
-      // Handle known errors
       if (error instanceof HttpException) {
         throw error;
       }
-
-      // Handle other errors
       return {
         success: false,
         message: error.message || 'Failed to fetch messages',
       };
     }
   }
-
-  /**
-   * Get a single message by ID
-   * Returns message with prescription data if applicable
-   * Verifies that the user is authorized to access this message
-   * @param id - The ID of the message
-   * @param req - The request object containing the authenticated user
-   * @returns The message
-   */
   @ApiOperation({
     summary: 'Get a single message by ID',
     description:
@@ -148,12 +115,9 @@ export class MessageController {
 
       return result;
     } catch (error) {
-      // Handle known errors
       if (error instanceof HttpException) {
         throw error;
       }
-
-      // Handle other errors
       return {
         success: false,
         message: error.message || 'Failed to fetch message',
