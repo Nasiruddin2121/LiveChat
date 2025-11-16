@@ -66,7 +66,7 @@ model User {
   email_verified_at DateTime?
 
   is_two_factor_enabled Int?    @default(0)
-  two_factor_secret     String? // secret key for two factor authentication
+  two_factor_secret     String? 
 
   accounts                  Account[]
   creator_conversations     Conversation[] @relation("creator")
@@ -265,9 +265,9 @@ model Broadcast {
 
   message String?
 
-  status          String? @default("open") // "open", "assisted", "closed"
-  assisted_by     String? // doctor_id who responded first
-  conversation_id String? // Links to conversation once doctor responds
+  status          String? @default("open") 
+  assisted_by     String? 
+  conversation_id String? 
 
   @@index([status])
   @@index([patient_id])
@@ -275,19 +275,12 @@ model Broadcast {
   @@index([assisted_by])
   @@map("broadcasts")
 }
-
-// ---------End Broadcast schema---------
-
-// ---------Start Chat schema---------
-
 enum MessageStatus {
   PENDING
   SENT
   DELIVERED
   READ
 }
-
-// message is used for conversation
 model Message {
   id         String    @id @default(cuid())
   created_at DateTime  @default(now())
@@ -317,8 +310,6 @@ model Message {
   @@index([conversation_id])
   @@map("messages")
 }
-
-// this table stores attachment of message
 model Attachment {
   id         String    @id @default(cuid())
   created_at DateTime  @default(now())
@@ -336,7 +327,6 @@ model Attachment {
   @@map("attachments")
 }
 
-// this table stores conversation
 model Conversation {
   id         String    @id @default(cuid())
   created_at DateTime  @default(now())
@@ -362,8 +352,6 @@ model Conversation {
   @@index([assisted_by])
   @@map("conversations")
 }
-
-// ---------End Chat schema---------
 
 model Faq {
   id         String    @id @default(cuid())
@@ -461,18 +449,4 @@ model UserSetting {
   @@map("user_settings")
 }
 
-// this table stores example
-// model Note {
-//   id                String  @id @default(cuid())
-//   created_at DateTime  @default(now())
-//   updated_at DateTime  @default(now())
-//   deleted_at DateTime?
-//   status     Int?      @default(1) @db.SmallInt
 
-//   title String?
-//   body  String? @db.Text
-
-//   tenant_id Int?
-//   tenant    Organization? @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
-//   @@map("posts")
-// }
